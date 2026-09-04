@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>إحصائياتي — متجر الأصالة</title>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--forest:#123324;--gold:#C9A24B;--gold-soft:#E7CE8E;--cream:#FAF5E8;--line:rgba(201,162,75,.28)}
+  body{margin:0;background:var(--cream);font-family:'Tajawal',sans-serif;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{background:#fff;border-radius:20px;padding:26px 22px;max-width:360px;width:100%;text-align:center;box-shadow:0 10px 26px rgba(15,42,31,.14);border:1px solid var(--line)}
+  h1{font-family:'Reem Kufi',sans-serif;font-size:17px;color:var(--forest);margin:0 0 4px}
+  p.sub{color:#a2916f;font-size:12px;margin:0 0 18px}
+  .stat{background:var(--cream);border-radius:14px;padding:16px;margin-bottom:10px}
+  .stat b{display:block;font-family:'Reem Kufi',sans-serif;font-size:22px;color:var(--forest)}
+  .stat span{font-size:11.5px;color:#a2916f}
+  .status{display:inline-block;padding:4px 12px;border-radius:999px;font-size:11px;margin-bottom:14px}
+  .status.on{background:#DCEFE1;color:#2E7D4F}
+  .status.off{background:#F5DAD3;color:#B4402A}
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <p class="sub">جارِ التحميل…</p>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script>
+    const code = new URLSearchParams(location.search).get('code');
+    const card = document.getElementById('card');
+    if(!ALASALA_FIREBASE_CONFIG.apiKey.startsWith('PASTE') && code){
+      firebase.initializeApp(ALASALA_FIREBASE_CONFIG);
+      firebase.firestore().collection('dealers').doc(code).get().then(doc=>{
+        if(!doc.exists){ card.innerHTML = '<p class="sub">رابط غير صحيح</p>'; return; }
+        const d = doc.data();
+        card.innerHTML = `
+          <h1>مرحبًا ${d.name} 👋</h1>
+          <p class="sub">إحصائياتك في متجر الأصالة</p>
+          <span class="status ${d.active?'on':'off'}">${d.active?'رابطك مفعّل حاليًا':'رابطك موقوف حاليًا'}</span>
+          <div class="stat"><b>${d.stats?.confirmedOrders||0}</b><span>طلب مؤكد</span></div>
+          <div class="stat"><b>${d.stats?.confirmedTotal||0}</b><span>إجمالي مبيعاتك المؤكدة</span></div>
+        `;
+      }).catch(()=>{ card.innerHTML = '<p class="sub">تعذّر تحميل البيانات، تأكدي من الاتصال بالإنترنت</p>'; });
+    } else {
+      card.innerHTML = '<p class="sub">رابط غير صحيح</p>';
+    }
+  </script>
+</body>
+</html>
