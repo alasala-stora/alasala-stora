@@ -16,4 +16,4 @@ const ALASALA_FIREBASE_CONFIG = {
 
 // مفتاح VAPID للإشعارات (Firebase Console → إعدادات المشروع → Cloud Messaging
 // → "Web Push certificates" → Generate key pair)
-const ALASALA_VAPID_KEY = "PASTE_VAPID_KEY_HERE";
+const ALASALA_VAPID_KEY = "BMjI9RhuNznmyA-9_1lYP0yeLxLykdZ9q8ZogHUW2fIaIireOlAeHGwz1LpOnciGlClMayRd2spiHYZMn4Nb2a0";
