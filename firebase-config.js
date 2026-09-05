@@ -6,12 +6,12 @@
    ========================================================= */
 
 const ALASALA_FIREBASE_CONFIG = {
-  apiKey: "PASTE_API_KEY_HERE",
-  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE_PROJECT_ID.appspot.com",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyASu032ZeIfd-N_U17bEFEZyBGLqOLPlgQ",
+  authDomain: "alasala-store.firebaseapp.com",
+  projectId: "alasala-store",
+  storageBucket: "alasala-store.firebasestorage.app",
+  messagingSenderId: "361350228556",
+  appId: "1:361350228556:web:7bb9e641d07e5153e5a2e9"
 };
 
 // مفتاح VAPID للإشعارات (Firebase Console → إعدادات المشروع → Cloud Messaging
