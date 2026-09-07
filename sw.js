@@ -43,11 +43,12 @@ self.addEventListener('fetch', (event) => {
 });
 
 // ---------- استقبال إشعارات Firebase Cloud Messaging بالخلفية ----------
-// يُفعَّل لاحقًا عند ربط مشروع Firebase الجديد بمفاتيحه الخاصة.
 self.addEventListener('push', (event) => {
   if (!event.data) return;
   let payload = {};
   try { payload = event.data.json(); } catch (e) { payload = { title: 'متجر الأصالة', body: event.data.text() }; }
+  // FCM قد يرسل البيانات متداخلة تحت مفتاح data
+  if (payload.data && (payload.data.title || payload.data.body)) payload = payload.data;
   const title = payload.title || 'متجر الأصالة';
   const options = {
     body: payload.body || '',
