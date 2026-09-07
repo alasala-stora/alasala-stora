@@ -731,9 +731,13 @@ window.addEventListener('popstate', ()=>{
   document.getElementById('installSheet').classList.remove('show');
 });
 
-document.getElementById('confirmOrder').addEventListener('click', async ()=>{
+document.getElementById('confirmOrder').addEventListener('click', ()=>{
   if(!cart.length){ showToast('السلة فاضية'); return; }
   const total = cart.reduce((n,c)=>n+c.price*c.qty,0);
+  const lines = cart.map(c=>`- ${c.name} × ${c.qty} = ${c.price*c.qty} ${currencyLabel(c.currency)}`).join('%0A');
+  const msg = `مرحبًا، أبغى أأكد طلب من متجر الأصالة:%0A${lines}%0Aالإجمالي: ${total} ${currencyLabel(cart[0].currency)}`;
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
+
   const orderData = {
     items: cart, total, currency: cart[0].currency,
     dealerCode: activeDealerRef || null,
@@ -741,12 +745,9 @@ document.getElementById('confirmOrder').addEventListener('click', async ()=>{
     createdAt: isFirebaseReady ? firebase.firestore.FieldValue.serverTimestamp() : new Date().toISOString()
   };
   if(isFirebaseReady && db && navigator.onLine){
-    try{ await db.collection('orders').add(orderData); }catch(e){}
+    db.collection('orders').add(orderData).catch(()=>{});
   }
-  const lines = cart.map(c=>`- ${c.name} × ${c.qty} = ${c.price*c.qty} ${currencyLabel(c.currency)}`).join('%0A');
-  const msg = `مرحبًا، أبغى أأكد طلب من متجر الأصالة:%0A${lines}%0Aالإجمالي: ${total} ${currencyLabel(cart[0].currency)}`;
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, '_blank');
-  cart = []; saveCart();
+
   closeCartSheet();
   if(history.state && history.state.sheet==='cart') history.back();
   showToast('تم إرسال طلبك 🎉 بانتظار التأكيد');
