@@ -396,7 +396,7 @@ document.getElementById('cancelEditBtn').addEventListener('click', resetProductF
 
 async function sendAutoNotification(title, body){
   try{
-    await fetch('https://silly-trifle-0666cf.netlify.app/.netlify/functions/send-notification', {
+    await fetch('https://dawn-bird-1c68.nnh8nnh.workers.dev', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({title, body})
     });
